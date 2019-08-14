@@ -1050,26 +1050,26 @@ static void testWriteMatrix() {
 // ------------------------------------------------------------------------
 
 int main() {
-//    testFiveRoundSingleByteDistinguisher();
-//    testFiveRoundSingleByteToThreeColumnsDistinguisher();
-//    testFiveRoundDiagonalDistinguisher();
-//    testFiveRoundDiagonalToTwoZeroColumnsDistinguisher();
-//    testFiveRoundDiagonalToThreeZeroColumnsDistinguisher();
-//
-//    testFiveRoundDiagonalToOneFixedZeroColumnDistinguisher();
-//    testFiveRoundDiagonalToTwoFixedZeroColumnsDistinguisher();
-//    testFiveRoundDiagonalToThreeFixedZeroColumnsDistinguisher();
-//
-//    testFiveRoundDiagonalToExactlyOneFixedZeroColumnDistinguisher();
-//    testFiveRoundDiagonalToExactlyTwoFixedZeroColumnsDistinguisher();
-//    testFiveRoundDiagonalToExactlyThreeFixedZeroColumnsDistinguisher();
+    testFiveRoundSingleByteDistinguisher();
+    testFiveRoundSingleByteToThreeColumnsDistinguisher();
+    testFiveRoundDiagonalDistinguisher();
+    testFiveRoundDiagonalToTwoZeroColumnsDistinguisher();
+    testFiveRoundDiagonalToThreeZeroColumnsDistinguisher();
 
-//    testSixRoundDiagonalDistinguisher();
-//    testSevenRoundDiagonalDistinguisher();
-//    testSevenRoundDiagonalToFixedColumnDistinguisher();
-//    testSevenRoundOneToTwoDiagonalsDistinguisher();
-//    testSevenRoundTwoDiagonalsDistinguisher();
-//    testSevenRoundThreeDiagonalsDistinguisher();
+    testFiveRoundDiagonalToOneFixedZeroColumnDistinguisher();
+    testFiveRoundDiagonalToTwoFixedZeroColumnsDistinguisher();
+    testFiveRoundDiagonalToThreeFixedZeroColumnsDistinguisher();
+
+    testFiveRoundDiagonalToExactlyOneFixedZeroColumnDistinguisher();
+    testFiveRoundDiagonalToExactlyTwoFixedZeroColumnsDistinguisher();
+    testFiveRoundDiagonalToExactlyThreeFixedZeroColumnsDistinguisher();
+
+    testSixRoundDiagonalDistinguisher();
+    testSevenRoundDiagonalDistinguisher();
+    testSevenRoundDiagonalToFixedColumnDistinguisher();
+    testSevenRoundOneToTwoDiagonalsDistinguisher();
+    testSevenRoundTwoDiagonalsDistinguisher();
+    testSevenRoundThreeDiagonalsDistinguisher();
 
     testFiveRoundDiagonalToExactlyNFirstNonZeroColumnsDistinguisher();
     testSingleRoundColumnDistinguishers();

@@ -18,7 +18,7 @@ the MixColumns operation in AES.
   distributions, `sudo apt install cmake` should install it.
   
 - Unfortunately, I am a fan of tests. So the `gtest` extension for `cmake` is
-  required to build with it. On current Linux distributions, `sudo apt-get
+  required to build with it. On current Linux distributions, `sudo apt
   install libgtest-dev` should install `gtest`. Moreover, it needs pthreads in
   any form on the system.
 

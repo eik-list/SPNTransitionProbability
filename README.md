@@ -1,6 +1,6 @@
 # Transition probability for Substitution-Permutation Networks
-Simple C/C++ code for experimenting with weight-transition probabilities in
-AES-like ciphers. The Z-table is essentially the weight distribution of the Maximum-Distance Separable (MDS) code used in AES. 
+Simple C/C++ code for experimenting with getNumActiveBytesInColumn-transition probabilities in
+AES-like ciphers. The Z-table is essentially the getNumActiveBytesInColumn distribution of the Maximum-Distance Separable (MDS) code used in AES. 
 
 
 ## Dependencies

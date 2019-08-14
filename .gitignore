@@ -1,2 +1,10 @@
 .idea
-transition_matrix
+*.cbp
+cmake-build-debug
+cmake-build-release
+cmake_install.cmake
+bin
+bak
+results
+CMakeCache.txt
+CMakeFiles

@@ -10,6 +10,9 @@
 #define MAXBC                (128/32)
 #define MAXKC                (128/32)
 #define MAXROUNDS            10
+#define NUM_AES_BYTES        16
+#define NUM_AES_ROWS         4
+#define NUM_AES_COLUMNS      4
 
     typedef unsigned char uint8_t;
     typedef unsigned short word16;

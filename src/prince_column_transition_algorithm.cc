@@ -2,7 +2,7 @@
  * Copyright 2019 anonymized
  */
 
-#include "aes_column_transition_algorithm.h"
+#include "prince_column_transition_algorithm.h"
 
 #include <fstream>
 
@@ -224,13 +224,13 @@ static void initializeConstants() {
 
 // ------------------------------------------------------------------------
 
-AESColumnTransitionAlgorithm::AESColumnTransitionAlgorithm() {
+PRINCEColumnTransitionAlgorithm::PRINCEColumnTransitionAlgorithm() {
     initializeConstants();
 }
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::buildSingleElementDistribution(
+void PRINCEColumnTransitionAlgorithm::buildSingleElementDistribution(
     NTL::vec_RR &distribution,
     const size_t columnPatternAsInt) const {
     distribution.SetLength(625);
@@ -246,7 +246,7 @@ void AESColumnTransitionAlgorithm::buildSingleElementDistribution(
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::buildSingleElementDistribution(
+void PRINCEColumnTransitionAlgorithm::buildSingleElementDistribution(
     NTL::vec_RR &distribution,
     const uint8_t columnPattern[4]) const {
     const size_t columnPatternAsInt = computeIndex(columnPattern);
@@ -255,7 +255,7 @@ void AESColumnTransitionAlgorithm::buildSingleElementDistribution(
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::buildUniformDifferencesDistribution(
+void PRINCEColumnTransitionAlgorithm::buildUniformDifferencesDistribution(
     NTL::vec_RR &distribution,
     const uint8_t columnPattern[4]) const {
     const size_t index = computeIndex(columnPattern);
@@ -276,7 +276,7 @@ void AESColumnTransitionAlgorithm::buildUniformDifferencesDistribution(
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::buildFirstByteDistribution(
+void PRINCEColumnTransitionAlgorithm::buildFirstByteDistribution(
     NTL::vec_RR &distribution) const {
     distribution.SetLength(625);
     distribution[0].SetPrecision(PRECISION);
@@ -286,7 +286,7 @@ void AESColumnTransitionAlgorithm::buildFirstByteDistribution(
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::buildFirstDiagonalDistribution(
+void PRINCEColumnTransitionAlgorithm::buildFirstDiagonalDistribution(
     NTL::vec_RR &distribution) const {
     distribution.SetLength(625);
     distribution[0].SetPrecision(PRECISION);
@@ -299,7 +299,7 @@ void AESColumnTransitionAlgorithm::buildFirstDiagonalDistribution(
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::buildFirstTwoDiagonalsDistribution(
+void PRINCEColumnTransitionAlgorithm::buildFirstTwoDiagonalsDistribution(
     NTL::vec_RR &distribution) const {
     distribution.SetLength(625);
     distribution[0].SetPrecision(PRECISION);
@@ -329,7 +329,7 @@ void AESColumnTransitionAlgorithm::buildFirstTwoDiagonalsDistribution(
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::buildFirstThreeDiagonalsDistribution(
+void PRINCEColumnTransitionAlgorithm::buildFirstThreeDiagonalsDistribution(
     NTL::vec_RR &distribution) const {
     distribution.SetLength(625);
     distribution[0].SetPrecision(PRECISION);
@@ -365,7 +365,7 @@ void AESColumnTransitionAlgorithm::buildFirstThreeDiagonalsDistribution(
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::buildAllDiagonalsDistribution(
+void PRINCEColumnTransitionAlgorithm::buildAllDiagonalsDistribution(
     NTL::vec_RR &distribution) const {
     distribution.SetLength(625);
     distribution[0].SetPrecision(PRECISION);
@@ -408,7 +408,7 @@ void AESColumnTransitionAlgorithm::buildAllDiagonalsDistribution(
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::buildFirstNDiagonalsDistribution(
+void PRINCEColumnTransitionAlgorithm::buildFirstNDiagonalsDistribution(
     NTL::vec_RR &distribution,
     const size_t numDiagonals) const {
 
@@ -434,7 +434,7 @@ void AESColumnTransitionAlgorithm::buildFirstNDiagonalsDistribution(
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::buildExactlyFirstTwoDiagonalsDistribution(
+void PRINCEColumnTransitionAlgorithm::buildExactlyFirstTwoDiagonalsDistribution(
     NTL::vec_RR &distribution) const {
     distribution.SetLength(625);
     distribution[0].SetPrecision(PRECISION);
@@ -459,7 +459,7 @@ void AESColumnTransitionAlgorithm::buildExactlyFirstTwoDiagonalsDistribution(
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::buildExactlyFirstThreeDiagonalsDistribution(
+void PRINCEColumnTransitionAlgorithm::buildExactlyFirstThreeDiagonalsDistribution(
     NTL::vec_RR &distribution) const {
     distribution.SetLength(625);
     distribution[0].SetPrecision(PRECISION);
@@ -489,7 +489,7 @@ void AESColumnTransitionAlgorithm::buildExactlyFirstThreeDiagonalsDistribution(
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::buildExactlyAllDiagonalsDistribution(
+void PRINCEColumnTransitionAlgorithm::buildExactlyAllDiagonalsDistribution(
     NTL::vec_RR &distribution) const {
     distribution.SetLength(625);
     distribution[0].SetPrecision(PRECISION);
@@ -525,7 +525,7 @@ void AESColumnTransitionAlgorithm::buildExactlyAllDiagonalsDistribution(
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::buildExactlyFirstNDiagonalsDistribution(
+void PRINCEColumnTransitionAlgorithm::buildExactlyFirstNDiagonalsDistribution(
     NTL::vec_RR &distribution,
     const size_t numDiagonals) const {
 
@@ -551,7 +551,7 @@ void AESColumnTransitionAlgorithm::buildExactlyFirstNDiagonalsDistribution(
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::buildFirstTwoBytesDistribution(
+void PRINCEColumnTransitionAlgorithm::buildFirstTwoBytesDistribution(
     NTL::vec_RR &distribution) const {
     distribution.SetLength(625);
     distribution[0].SetPrecision(PRECISION);
@@ -575,7 +575,7 @@ void AESColumnTransitionAlgorithm::buildFirstTwoBytesDistribution(
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::buildFirstThreeBytesDistribution(
+void PRINCEColumnTransitionAlgorithm::buildFirstThreeBytesDistribution(
     NTL::vec_RR &distribution) const {
     distribution.SetLength(625);
     distribution[0].SetPrecision(PRECISION);
@@ -600,7 +600,7 @@ void AESColumnTransitionAlgorithm::buildFirstThreeBytesDistribution(
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::buildFirstNBytesDistribution(
+void PRINCEColumnTransitionAlgorithm::buildFirstNBytesDistribution(
     NTL::vec_RR &distribution,
     const size_t numBytes) const {
 
@@ -626,7 +626,7 @@ void AESColumnTransitionAlgorithm::buildFirstNBytesDistribution(
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::precomputeShiftRowsMatrix() {
+void PRINCEColumnTransitionAlgorithm::precomputeShiftRowsMatrix() {
     // ------------------------------------------------------------------------
     // The transition probabilities for the SR layer is straight-forward.
     // Recall, T_SR is of dimension 625 x 625.
@@ -664,7 +664,7 @@ void AESColumnTransitionAlgorithm::precomputeShiftRowsMatrix() {
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::precomputeMixColumnsMatrix() {
+void PRINCEColumnTransitionAlgorithm::precomputeMixColumnsMatrix() {
     // ------------------------------------------------------------------------
     // Compute a 625 x 625 transition matrix T_MC where indices are in base-5,
     // e.g. an integer 0<= I < 625 can be written as
@@ -788,7 +788,7 @@ static void reduceZTable(NTL::mat_RR &Z_Table, const NTL::RR Z[16][16]) {
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::readZTable(const std::string &path) {
+void PRINCEColumnTransitionAlgorithm::readZTable(const std::string &path) {
     NTL::ZZ Z_ZZ[16][16];
     hasInitializedZTable = false;
 
@@ -805,7 +805,7 @@ void AESColumnTransitionAlgorithm::readZTable(const std::string &path) {
 
 // ------------------------------------------------------------------------
 
-bool AESColumnTransitionAlgorithm::haveMatricesBeenPrecomputed() const {
+bool PRINCEColumnTransitionAlgorithm::haveMatricesBeenPrecomputed() const {
     if (!hasInitializedTSR) {
         std::cerr << "ShiftRows matrix has not been initialized. Aborting"
                   << std::endl;
@@ -821,7 +821,7 @@ bool AESColumnTransitionAlgorithm::haveMatricesBeenPrecomputed() const {
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::createMatrix(NTL::mat_RR &matrix,
+void PRINCEColumnTransitionAlgorithm::createMatrix(NTL::mat_RR &matrix,
                                                 const size_t numRounds) const {
     if (!haveMatricesBeenPrecomputed()) {
         return;
@@ -851,7 +851,7 @@ void AESColumnTransitionAlgorithm::createMatrix(NTL::mat_RR &matrix,
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::writeMatrix(const std::string &path,
+void PRINCEColumnTransitionAlgorithm::writeMatrix(const std::string &path,
                                                const NTL::mat_RR &matrix)
 const {
     std::fstream outputFileStream;
@@ -885,7 +885,7 @@ printInterest(const int v0, const int v1, const int v2, const int v3,
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::computeOutputDistributionForAES(
+void PRINCEColumnTransitionAlgorithm::computeRealOutputDistribution(
     NTL::vec_RR &outputDistribution,
     const NTL::vec_RR &inputDistribution,
     const NTL::mat_RR &matrix) const {
@@ -896,7 +896,7 @@ void AESColumnTransitionAlgorithm::computeOutputDistributionForAES(
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::computeOutputProbabilityForAES(
+void PRINCEColumnTransitionAlgorithm::computeRealOutputProbability(
     NTL::RR &probability,
     const NTL::vec_RR &inputDistribution,
     const bool outputInterests[5][5][5][5],
@@ -911,7 +911,7 @@ void AESColumnTransitionAlgorithm::computeOutputProbabilityForAES(
     }
 
     NTL::vec_RR outputDistribution;
-    computeOutputDistributionForAES(outputDistribution, inputDistribution,
+    computeRealOutputDistribution(outputDistribution, inputDistribution,
                                     matrix);
 
     for (int v0 = 0; v0 < 5; v0++) {
@@ -931,7 +931,7 @@ void AESColumnTransitionAlgorithm::computeOutputProbabilityForAES(
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::computeOutputDistributionForAES(
+void PRINCEColumnTransitionAlgorithm::computeRealOutputDistribution(
     NTL::vec_RR &outputDistribution,
     const NTL::vec_RR &inputDistribution,
     const size_t numRounds) const {
@@ -961,7 +961,7 @@ void AESColumnTransitionAlgorithm::computeOutputDistributionForAES(
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::computeOutputProbabilityForAES(
+void PRINCEColumnTransitionAlgorithm::computeRealOutputProbability(
     NTL::RR &probability,
     const NTL::vec_RR &inputDistribution,
     const bool outputInterests[5][5][5][5],
@@ -975,7 +975,7 @@ void AESColumnTransitionAlgorithm::computeOutputProbabilityForAES(
     probability.SetPrecision(PRECISION);
 
     NTL::vec_RR outputDistribution;
-    computeOutputDistributionForAES(outputDistribution,
+    computeRealOutputDistribution(outputDistribution,
                                     inputDistribution,
                                     numRounds);
 
@@ -1000,7 +1000,7 @@ void AESColumnTransitionAlgorithm::computeOutputProbabilityForAES(
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::computeOutputDistributionForPRP(
+void PRINCEColumnTransitionAlgorithm::computePRPOutputDistribution(
     NTL::vec_RR &outputDistribution) const {
     outputDistribution.SetLength(625);
     outputDistribution[0].SetPrecision(PRECISION);
@@ -1026,7 +1026,7 @@ void AESColumnTransitionAlgorithm::computeOutputDistributionForPRP(
 
 // ------------------------------------------------------------------------
 
-void AESColumnTransitionAlgorithm::computeOutputProbabilityForPRP(
+void PRINCEColumnTransitionAlgorithm::computePRPOutputProbability(
     NTL::RR &probability,
     const bool outputInterests[5][5][5][5]) const {
 

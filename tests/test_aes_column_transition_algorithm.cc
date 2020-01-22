@@ -58,6 +58,20 @@ getNumZeroOutputColumns(const size_t v0,
 
 // ------------------------------------------------------------------------
 
+static void buildAllOutputInterests(bool distribution[5][5][5][5]) {
+    for (size_t v0 = 0; v0 < 5; v0++) {
+        for (size_t v1 = 0; v1 < 5; v1++) {
+            for (size_t v2 = 0; v2 < 5; v2++) {
+                for (size_t v3 = 0; v3 < 5; v3++) {
+                    distribution[v0][v1][v2][v3] = true;
+                }
+            }
+        }
+    }
+}
+
+// ------------------------------------------------------------------------
+
 static void
 buildAtLeastNZeroColumnOutputInterests(bool distribution[5][5][5][5],
                                        const size_t minNumZeroOutputColumns) {
@@ -69,6 +83,29 @@ buildAtLeastNZeroColumnOutputInterests(bool distribution[5][5][5][5],
                         v0, v1, v2, v3);
                     distribution[v0][v1][v2][v3] =
                         (numZeroOutputColumns >= minNumZeroOutputColumns);
+                }
+            }
+        }
+    }
+}
+
+// ------------------------------------------------------------------------
+
+static void
+buildAtLeastNZeroColumnOutputInterestsWithFirstColumnBytes(
+    bool distribution[5][5][5][5],
+    const size_t minNumZeroOutputColumns,
+    const size_t numActiveInFirstColumn) {
+    //
+    for (size_t v0 = 0; v0 < 5; v0++) {
+        for (size_t v1 = 0; v1 < 5; v1++) {
+            for (size_t v2 = 0; v2 < 5; v2++) {
+                for (size_t v3 = 0; v3 < 5; v3++) {
+                    const size_t numZeroOutputColumns = getNumZeroOutputColumns(
+                        v0, v1, v2, v3);
+                    distribution[v0][v1][v2][v3] =
+                        (numZeroOutputColumns >= minNumZeroOutputColumns)
+                        && (v0 == numActiveInFirstColumn);
                 }
             }
         }
@@ -325,6 +362,27 @@ buildExactlyNFirstNonZeroOutputColumnInterests(bool distribution[5][5][5][5],
         buildExactlyThreeFixedNonZeroOutputColumnInterests(distribution);
     } else if (numFirstNonZeroOutputColumns == 4) {
         buildExactlyFourFixedNonZeroOutputColumnInterests(distribution);
+    }
+}
+
+// ------------------------------------------------------------------------
+
+static void
+buildExactlyNFirstNonZeroOutputBytesInterests(bool distribution[5][5][5][5],
+                                              const size_t numFirstNonZeroOutputColumns,
+                                              const size_t numFirstNonZeroOutputBytes) {
+    for (size_t v0 = 0; v0 < 5; v0++) {
+        for (size_t v1 = 0; v1 < 5; v1++) {
+            for (size_t v2 = 0; v2 < 5; v2++) {
+                for (size_t v3 = 0; v3 < 5; v3++) {
+                    distribution[v0][v1][v2][v3] =
+                        (v0 == numFirstNonZeroOutputBytes)
+                        && (v1 == 0)
+                        && (v2 == 0)
+                        && (v3 == 0);
+                }
+            }
+        }
     }
 }
 
@@ -891,6 +949,51 @@ static void testSevenRoundThreeDiagonalsDistinguisher() {
 
 // ------------------------------------------------------------------------
 
+/**
+ * Maps a pattern of active bytes/columns to an int.
+ * @example wpattern[2, 3, 1, 1] is mapped to
+ * 2 * 5^0 + 3 * 5^1 + 1 * 5^2 + 1 * 5^3.
+ * @param pattern Array of bytes/columns of a state.
+ * @return
+ */
+static size_t computeIndex(const size_t pattern[4]) {
+    size_t result = 0;
+
+    for (size_t i = 0; i < 4; i++) {
+        result += static_cast<size_t>(pow(5, i)) * pattern[i];
+    }
+
+    return result;
+}
+
+// ------------------------------------------------------------------------
+
+static void printDistribution(const NTL::vec_RR &distribution) {
+    std::cout << "# Distribution" << std::endl;
+    distribution[0].SetOutputPrecision(100);
+
+    for (size_t v0 = 0; v0 < 5; v0++) {
+        for (size_t v1 = 0; v1 < 5; v1++) {
+            for (size_t v2 = 0; v2 < 5; v2++) {
+                for (size_t v3 = 0; v3 < 5; v3++) {
+                    const size_t pattern[4] = {v0, v1, v2, v3};
+                    const size_t index = computeIndex(pattern);
+
+//                    if (distribution[index] > 0) {
+                        std::cout << v0
+                                  << v1
+                                  << v2
+                                  << v3 << " "
+                                  << distribution[index] << std::endl;
+//                    }
+                }
+            }
+        }
+    }
+}
+
+// ------------------------------------------------------------------------
+
 static void testSingleRoundColumnDistinguishers() {
     AESColumnTransitionAlgorithm algorithm;
     setUp(algorithm);
@@ -909,14 +1012,13 @@ static void testSingleRoundColumnDistinguishers() {
         for (size_t minNumZeroOutputColumns = 1;
              minNumZeroOutputColumns <= 4;
              ++minNumZeroOutputColumns) {
-            // TODO
 
             buildAtLeastNZeroColumnOutputInterests(outputInterests,
                                                    minNumZeroOutputColumns);
 
             NTL::vec_RR inputDistribution;
             algorithm.buildExactlyFirstNDiagonalsDistribution(inputDistribution,
-                                                       numActiveInputColumns);
+                                                              numActiveInputColumns);
 
             NTL::RR probabilityForAES;
             algorithm.computeOutputProbabilityForAES(probabilityForAES,
@@ -1026,11 +1128,62 @@ static void testFiveRoundDiagonalToExactlyNFirstNonZeroColumnsDistinguisher() {
 
 // ------------------------------------------------------------------------
 
+static void testFiveRoundDiagonalToExactlyNFirstNonZeroBytesDistinguisher() {
+    AESColumnTransitionAlgorithm algorithm;
+    setUp(algorithm);
+
+    const size_t NUM_ROUNDS = 5;
+    bool outputInterests[5][5][5][5];
+    const size_t numActiveInputColumns = 1;
+
+    std::cout << "#Rounds "
+              << "#Active input columns "
+              << "#Non-zero first output columns "
+              << "#Non-zero output bytes"
+              << std::endl;
+
+    for (size_t numFirstNonZeroOutputColumns = 1;
+         numFirstNonZeroOutputColumns <= 4;
+         ++numFirstNonZeroOutputColumns) {
+        for (size_t numFirstNonZeroBytes = 1;
+             numFirstNonZeroBytes <= 4; ++numFirstNonZeroBytes) {
+            //
+            buildExactlyNFirstNonZeroOutputBytesInterests(outputInterests,
+                                                          numFirstNonZeroOutputColumns,
+                                                          numFirstNonZeroBytes);
+
+            NTL::vec_RR inputDistribution;
+            algorithm.buildFirstDiagonalDistribution(inputDistribution);
+
+            NTL::RR probabilityForAES;
+            algorithm.computeOutputProbabilityForAES(probabilityForAES,
+                                                     inputDistribution,
+                                                     outputInterests,
+                                                     NUM_ROUNDS);
+
+            NTL::RR probabilityForPRP;
+            algorithm.computeOutputProbabilityForPRP(probabilityForPRP,
+                                                     outputInterests);
+
+            std::cout << NUM_ROUNDS << " "
+                      << numActiveInputColumns << " "
+                      << numFirstNonZeroOutputColumns << " "
+                      << numFirstNonZeroBytes
+                      << std::endl;
+            printProbabilities(probabilityForAES, probabilityForPRP);
+        }
+    }
+
+    tearDown(algorithm);
+}
+
+// ------------------------------------------------------------------------
+
 static void testWriteMatrix() {
     AESColumnTransitionAlgorithm algorithm;
     setUp(algorithm);
 
-    for (size_t numRounds = 2; numRounds <= 6; ++numRounds) {
+    for (size_t numRounds = 1; numRounds <= 1; ++numRounds) {
         NTL::mat_RR matrix;
         matrix.SetDims(625, 625);
         matrix[0][0].SetPrecision(400);
@@ -1049,29 +1202,85 @@ static void testWriteMatrix() {
 
 // ------------------------------------------------------------------------
 
+static void printIndividualRoundColumnDistributions() {
+    AESColumnTransitionAlgorithm algorithm;
+    setUp(algorithm);
+
+    const size_t MAX_NUM_ROUNDS = 6;
+    bool outputInterests[5][5][5][5];
+    buildAllOutputInterests(outputInterests);
+
+    // ------------------------------------------------------------------------
+    // Random distribution
+    // ------------------------------------------------------------------------
+
+    NTL::vec_RR outputDistribution;
+    algorithm.computeOutputDistributionForPRP(outputDistribution);
+
+    std::cout << "# v_rand" << std::endl;
+    printDistribution(outputDistribution);
+
+    std::cout << "#Rounds" << " "
+              << "#Active input columns" << " "
+              << "#>= Zero output columns" << std::endl;
+
+    for (size_t numActiveInputColumns = 1;
+         numActiveInputColumns <= 1;
+         ++numActiveInputColumns) {
+        // --------------------------------------------------------------------
+        // v0 distribution
+        // --------------------------------------------------------------------
+
+        NTL::vec_RR inputDistribution;
+        algorithm.buildExactlyFirstNDiagonalsDistribution(inputDistribution,
+                                                          numActiveInputColumns);
+        std::cout << "# v0" << std::endl;
+        printDistribution(inputDistribution);
+
+        for (size_t numRounds = 2; numRounds <= MAX_NUM_ROUNDS; ++numRounds) {
+            // --------------------------------------------------------------------
+            // vi
+            // --------------------------------------------------------------------
+
+            algorithm.computeOutputDistributionForAES(outputDistribution,
+                                                      inputDistribution,
+                                                      numRounds);
+
+            std::cout << "# v" << (numRounds - 1) << std::endl;
+            printDistribution(outputDistribution);
+        }
+    }
+
+    tearDown(algorithm);
+}
+// ------------------------------------------------------------------------
+
 int main() {
-    testFiveRoundSingleByteDistinguisher();
-    testFiveRoundSingleByteToThreeColumnsDistinguisher();
-    testFiveRoundDiagonalDistinguisher();
-    testFiveRoundDiagonalToTwoZeroColumnsDistinguisher();
-    testFiveRoundDiagonalToThreeZeroColumnsDistinguisher();
+//    testFiveRoundSingleByteDistinguisher();
+//    testFiveRoundSingleByteToThreeColumnsDistinguisher();
+//    testFiveRoundDiagonalDistinguisher();
+//    testFiveRoundDiagonalToTwoZeroColumnsDistinguisher();
+//    testFiveRoundDiagonalToThreeZeroColumnsDistinguisher();
+//
+//    testFiveRoundDiagonalToOneFixedZeroColumnDistinguisher();
+//    testFiveRoundDiagonalToTwoFixedZeroColumnsDistinguisher();
+//    testFiveRoundDiagonalToThreeFixedZeroColumnsDistinguisher();
+//
+//    testFiveRoundDiagonalToExactlyOneFixedZeroColumnDistinguisher();
+//    testFiveRoundDiagonalToExactlyTwoFixedZeroColumnsDistinguisher();
+//    testFiveRoundDiagonalToExactlyThreeFixedZeroColumnsDistinguisher();
+//
+//    testSixRoundDiagonalDistinguisher();
+//    testSevenRoundDiagonalDistinguisher();
+//    testSevenRoundDiagonalToFixedColumnDistinguisher();
+//    testSevenRoundOneToTwoDiagonalsDistinguisher();
+//    testSevenRoundTwoDiagonalsDistinguisher();
+//    testSevenRoundThreeDiagonalsDistinguisher();
 
-    testFiveRoundDiagonalToOneFixedZeroColumnDistinguisher();
-    testFiveRoundDiagonalToTwoFixedZeroColumnsDistinguisher();
-    testFiveRoundDiagonalToThreeFixedZeroColumnsDistinguisher();
-
-    testFiveRoundDiagonalToExactlyOneFixedZeroColumnDistinguisher();
-    testFiveRoundDiagonalToExactlyTwoFixedZeroColumnsDistinguisher();
-    testFiveRoundDiagonalToExactlyThreeFixedZeroColumnsDistinguisher();
-
-    testSixRoundDiagonalDistinguisher();
-    testSevenRoundDiagonalDistinguisher();
-    testSevenRoundDiagonalToFixedColumnDistinguisher();
-    testSevenRoundOneToTwoDiagonalsDistinguisher();
-    testSevenRoundTwoDiagonalsDistinguisher();
-    testSevenRoundThreeDiagonalsDistinguisher();
-
-    testFiveRoundDiagonalToExactlyNFirstNonZeroColumnsDistinguisher();
-    testSingleRoundColumnDistinguishers();
+//    testFiveRoundDiagonalToExactlyNFirstNonZeroColumnsDistinguisher();
+//    testFiveRoundDiagonalToExactlyNFirstNonZeroBytesDistinguisher();
+//    testSingleRoundColumnDistinguishers();
+//    testWriteMatrix();
+    printIndividualRoundColumnDistributions();
     return EXIT_SUCCESS;
 }

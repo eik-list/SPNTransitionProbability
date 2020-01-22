@@ -37,7 +37,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -ggdb3 -DDEBUG -fsanitize=undefine
 
 set(CMAKE_BUILD_TYPE Release)
 
-if(NOT CMAKE_BUILD_TYPE) 
+if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug)
 endif(NOT CMAKE_BUILD_TYPE)
 
@@ -70,6 +70,9 @@ target_link_libraries(test_aes_column_transition_algorithm PRIVATE -lntl)
 
 add_executable(test_aes_row_and_column_transition_algorithm ${PROJECT_TESTS_DIR}/test_aes_row_and_column_transition_algorithm.cc ${SOURCES} ${INCLUDE_DIRECTORIES})
 target_link_libraries(test_aes_row_and_column_transition_algorithm PRIVATE -lntl)
+
+add_executable(test_aes_byte_mixture_transition_algorithm ${PROJECT_TESTS_DIR}/test_aes_byte_mixture_transition_algorithm.cc ${SOURCES} ${INCLUDE_DIRECTORIES})
+target_link_libraries(test_aes_byte_mixture_transition_algorithm PRIVATE -lntl)
 
 add_executable(test_aes_byte_transition_algorithm ${PROJECT_TESTS_DIR}/test_aes_byte_transition_algorithm.cc ${SOURCES} ${INCLUDE_DIRECTORIES})
 target_link_libraries(test_aes_byte_transition_algorithm PRIVATE -lntl)

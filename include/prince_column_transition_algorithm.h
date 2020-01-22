@@ -2,8 +2,8 @@
  * Copyright 2019 anonymized
  */
 
-#ifndef _AES_COLUMN_TRANSITION_ALGORITHM_H
-#define _AES_COLUMN_TRANSITION_ALGORITHM_H
+#ifndef _PRINCE_COLUMN_TRANSITION_ALGORITHM_H
+#define _PRINCE_COLUMN_TRANSITION_ALGORITHM_H
 
 // ------------------------------------------------------------------------
 
@@ -16,11 +16,11 @@
 
 // ------------------------------------------------------------------------
 
-class AESColumnTransitionAlgorithm {
+class PRINCEColumnTransitionAlgorithm {
 
 public:
 
-    AESColumnTransitionAlgorithm();
+    PRINCEColumnTransitionAlgorithm();
 
     void buildSingleElementDistribution(NTL::vec_RR &distribution,
                                         size_t columnPatternAsInt) const;
@@ -123,11 +123,11 @@ public:
     void writeMatrix(const std::string &path,
                      const NTL::mat_RR &matrix) const;
 
-    void computeOutputProbabilityForAES(NTL::RR &probability,
-                                        const NTL::vec_RR &inputDistribution,
-                                        const bool outputInterests[5][5][5][5],
-                                        const NTL::mat_RR &matrix,
-                                        size_t numRounds) const;
+    void computeRealOutputProbability(NTL::RR &probability,
+                                      const NTL::vec_RR &inputDistribution,
+                                      const bool outputInterests[5][5][5][5],
+                                      const NTL::mat_RR &matrix,
+                                      size_t numRounds) const;
 
     /**
      * Given (1) an input distribution that denotes the fractions of differences
@@ -154,29 +154,29 @@ public:
      * of inputDistribution -> v is added to the probability.
      * @param numRounds
      */
-    void computeOutputProbabilityForAES(NTL::RR &probability,
-                                        const NTL::vec_RR &inputDistribution,
-                                        const bool outputInterests[5][5][5][5],
-                                        size_t numRounds) const;
+    void computeRealOutputProbability(NTL::RR &probability,
+                                      const NTL::vec_RR &inputDistribution,
+                                      const bool outputInterests[5][5][5][5],
+                                      size_t numRounds) const;
 
     /**
      * Computes the probability of the output patterns for a random permutation.
      * @param probability
      * @param outputInterests
      */
-    void computeOutputProbabilityForPRP(NTL::RR &probability,
+    void computePRPOutputProbability(NTL::RR &probability,
                                         const bool outputInterests[5][5][5][5])
     const;
 
-    void computeOutputDistributionForAES(NTL::vec_RR &outputDistribution,
-                                         const NTL::vec_RR &inputDistribution,
-                                         const NTL::mat_RR &matrix) const;
+    void computeRealOutputDistribution(NTL::vec_RR &outputDistribution,
+                                       const NTL::vec_RR &inputDistribution,
+                                       const NTL::mat_RR &matrix) const;
 
-    void computeOutputDistributionForAES(NTL::vec_RR &outputDistribution,
-                                         const NTL::vec_RR &inputDistribution,
-                                         const size_t numRounds) const;
+    void computeRealOutputDistribution(NTL::vec_RR &outputDistribution,
+                                       const NTL::vec_RR &inputDistribution,
+                                       size_t numRounds) const;
 
-    void computeOutputDistributionForPRP(NTL::vec_RR &outputDistribution) const;
+    void computePRPOutputDistribution(NTL::vec_RR &outputDistribution) const;
 
 private:
 
@@ -192,4 +192,4 @@ private:
 
 // ------------------------------------------------------------------------
 
-#endif // _AES_COLUMN_TRANSITION_ALGORITHM_H
+#endif // _PRINCE_COLUMN_TRANSITION_ALGORITHM_H

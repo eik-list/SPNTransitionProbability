@@ -113,7 +113,7 @@ public:
      * @param numRounds
      */
     void createMatrix(NTL::mat_RR &matrix, size_t numRounds) const;
-
+    
     /**
      * Writes matrix to a text file.
      * @param path Output path, must exist and must have permissions.
